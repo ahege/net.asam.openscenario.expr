@@ -83,8 +83,29 @@ The main class (net.asam.openscenario.expr.TestExprMain) is already set. Start w
 ```
 Usage: <filename>
 ```  
-## Checking a File  
+## Checking a File
+When checking a file, any defined test int the file is executed (identified by its id). Sucess or error in issued on the command line.
+
 `java -jar net.asam.openscenario.expr-X.Y.Z-jar-with-dependencies.jar -i ./testDefinitions.json`    
+
+```
+Checking 'C:\temp\testDefinitions.json'
+Test 0 successful.
+Test 1 successful.
+Test 2 successful.
+Test 3 successful.  
+```
+## Errors
+Violations against expected values are issued:
+
+For Test definion
+```json
+{
+	"id" : 3,
+	"expr": "${4+6*5}",
+	"expectedValue": 35
+}
+```
 
 ```
 Checking 'C:\temp\testDefinitions.json'
@@ -94,6 +115,7 @@ Test 1 successful.
 
 Test 2 successful.
 
-Test 3 successful.  
+Error in test 3
+Expected Value: 35
+Actual value: 34
 ```
-
