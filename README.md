@@ -70,7 +70,7 @@ Implicit conversion is not a problem when double and 64 byte datatypes are used 
 * Any integer datatype (int, unsingedInt, unsignedShort) datatype can be safely converted to a 64 byte double value.
 
 ### Information loss on conversion
-Conversion from double to an interger value type (int, unsingedInt, unsignedShort) is done by cutting off the digits after the decimal separator (3.45 => 3, -3.54 => -3).
+Conversion from double to an integer value type (int, unsingedInt, unsignedShort) is done by cutting off the digits after the decimal separator (3.45 => 3, -3.54 => -3).
 As there is loss of information when converting from double to an integer datatype, this conversion must be explicit.
 
 E.g. the expression in this example must issue an error (e.g. "Floating point values must be explicitly casted. Use (int), (unsignedInt) or (unsignedShort) for explicit cast.")
