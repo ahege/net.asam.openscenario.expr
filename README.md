@@ -46,7 +46,7 @@ Due to mathematical rules and notations, the implemented evaluation of expressio
 *	avoid arithmetic overflow.
 
 # About this implementation
-This is a test implementation as a prrof of concept for the expression language. It includes basic tests as well as the possibility to include test descriptions and test them with a command line tool.
+This is a test implementation as a proof of concept for the expression language. It includes basic tests as well as the possibility to include test descriptions and test them with a command line tool.
 
 The project is in incubation status and is not intended to be included in production mode projects.
 
