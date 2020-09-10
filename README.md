@@ -96,11 +96,11 @@ Test 2 successful.
 Test 3 successful.  
 ```
 ## Errors
-There are four categories of violations:
+There are three categories of violations:
 
-1 Violation against expected values
-2 Violation against expected errors
-3 Unexpected errors
+1. Violation against expected values
+2. Violation against expected errors
+3. Unexpected errors
 
 ### Expected values
 When the result does not match the expected value, an error is issued:
