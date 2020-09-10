@@ -23,7 +23,7 @@ Examples for Expressions:
     - ${-$speed}
 *	Nested Expressions with brackets: 
     - ${($defaultWidth + 3)/2}
-Basic Design Policies
+# Basic Design Policies
 This fundamental list of requirements must be fullfilled.
 *	The use must be as intuitive as possible for the user.
 *	Operators are exclusively supported for numerical value datatypes. For int, unsingedInt, unsignedShort and double datatypes. Not for boolean, string or dateTime datatypes.
