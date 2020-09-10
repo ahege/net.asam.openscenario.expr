@@ -67,7 +67,9 @@ Three packages are built in the `target` folder.
 | de.rac.openscenario.expr-X.Y.Z-jar-with-dependencies.jar | A package that includes the compiled source code with any dependency embedded. |
 
 # Executing the Tester
-The checker tools checks both:
+The binaries may either be build with maven or downloaded [here](https://github.com/ahege/net.asam.openscenario.expr/tree/master/download):
+
+The tester tools checks both:
 
 * expressions against their expected values.
 * expressions against their expected errors.
@@ -104,7 +106,6 @@ There are three categories of violations:
 ### Expected values
 When the result does not match the expected value, an error is issued:
 
-For Test definition
 ```json
 {
  "id" : 3,
