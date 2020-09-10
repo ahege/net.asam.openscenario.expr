@@ -65,12 +65,11 @@ Three packages are built in the `target` folder.
 |-|-|
 | de.rac.openscenario.expr-X.Y.Z.jar | A package that includes the compiled source code |
 | de.rac.openscenario.expr-X.Y.Z-jar-with-dependencies.jar | A package that includes the compiled source code with any dependency embedded. |
-| de.rac.openscenario.expr-X.Y.Z-javadoc.jar | The javadoc documentation|
 
 # Executing the TestMain
 The checker tools checks both:
 
-* expressions against their expected values
+* expressions against their expected values.
 * expressions against their expected errors.
 
 The file format should be self-explaining Please see [this example](https://github.com/ahege/net.asam.openscenario.expr/blob/master/doc/examples/testDefinitions.json)
