@@ -1,0 +1,6 @@
+double delay=23.1;
+double speed= 4.333;
+int x0= 1;
+int x1=2;
+int y0=3;
+int y1=4;

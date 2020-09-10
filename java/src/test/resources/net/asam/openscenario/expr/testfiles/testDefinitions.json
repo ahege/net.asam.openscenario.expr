@@ -1,0 +1,89 @@
+[{
+	"id" : 0,
+	"parameterDefinitions": ["unsignedShort testShort = 65535;"],
+	"expr": "${$testShort +1}",
+	"expectedValue": 65536
+},{
+
+	"id" : 1,
+	"parameterDefinitions": ["unsignedShort testShort = 65535;"],
+	"expr": "${(unsignedShort) ($testShort +1)}",
+	"expectedError": {
+		"message": "Value '65536' cannot be converted to type 'unsignedShort'",
+		"column": 2
+	}
+},{
+	"id" : 2,
+	"parameterDefinitions": ["double delay=23.1;",
+	"double speed= 4.333;",
+	"int x0= 1;",
+	"int x1=2;",
+	"int y0=3;",
+	"int y1=4;"],
+	"expr": "${$delay + ((($x1 - $x0)*(int) 2 + ($y1 - $y0)*2 )*0.5 / $speed)}",
+	"expectedValue": 23.56157396722825
+},{
+	"id" : 3,
+	"expr": "${4+6*5}",
+	"expectedValue": 34
+},{
+	"id" : 4,
+	"expr": "${(unsignedShort) 66000}",
+	"expectedError": {
+		"message": "Value '66000' cannot be converted to type 'unsignedShort'",
+		"column": 2
+	}
+},{
+	"id" : 5,
+	"parameterDefinitions": ["double value= 65.5;"],
+	"expr": "${(int) ($value +1)}",
+	"expectedValue": 66
+},{
+	"expectedDatatype" : "int",
+	"id" : 6,
+	"parameterDefinitions": ["double value= -65.5;"],
+	"expr": "${(int) ($value -1 )}",
+	"expectedValue": -66
+},{
+	"id" : 7,
+	"parameterDefinitions": ["double value= -65.5;"],
+	"expectedDatatype" : "int",
+	"expr": "${$value +1}",
+	"expectedError": {
+		"message": "Double values must be explicitly casted. Use (int), (unsignedInt) or (unsignedShort) for explicit cast.",
+		"column": 2
+	}
+},{
+	"id" : 8,
+	"parameterDefinitions": ["double value= 0.0;"],
+	"expr": "${25/$value}",
+	"expectedError": {
+		"message": "Divison by zero",
+		"column": 5
+	}
+},{
+	"id" : 9,
+	"parameterDefinitions": ["unsignedInt value= 0;"],
+	"expr": "${25/$value}",
+	"expectedError": {
+		"message": "Divison by zero",
+		"column": 5
+	}
+},{
+	"id" : 10,
+	"parameterDefinitions": ["unsignedInt value= 0;"],
+	"expr": "${25/$value}",
+	"expectedError": {
+		"message": "Divison by zero",
+		"column": 5
+	}
+},{
+	"id" : 11,
+	"comment": "Value exceed internal 64 byte limitations => abort with error",
+	"expr": "${-2147483648 * -2147483648 * -2147483648}",
+	"expectedError": {
+		"message": "Internal Overflow (limits of internal 64 bit integer value exceeded)",
+		"column": 28
+	}
+}
+]
