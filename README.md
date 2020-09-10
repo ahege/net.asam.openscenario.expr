@@ -48,6 +48,8 @@ Due to mathematical rules and notations, the implemented evaluation of expressio
 ## About this implementation
 This is a test implementation as a prrof of concept for the expression language. It includes basic tests as well as the possibility to include test descriptions and test them with a command line tool.
 
+The project is in incubation status and is not intended to be included in production mode projects.
+
 # Building the Sources
 ## JAVA
 * Clone the master branch (the `java` path from this project)
@@ -66,4 +68,31 @@ Three packages are built in the `target` folder.
 | de.rac.openscenario.expr-X.Y.Z-javadoc.jar | The javadoc documentation|
 
 # Executing the TestMain
-Te
+The checker tools checks both:
+
+* expressions against their expected values
+* expressions against their expected errors.
+
+The main class (net.asam.openscenario.expr.TestExprMain) is already set. Start with:
+
+`java -jar net.asam.openscenario.expr-X.Y.Z-jar-with-dependencies.jar`
+
+```
+Usage: <filename>
+```  
+## Checking a File
+See [doc/examples/simpleExample](https://github.com/RA-Consulting-GmbH/openscenario.api.test/tree/master/doc/examples/simpleExample)  
+  
+`java -jar net.asam.openscenario.expr-X.Y.Z-jar-with-dependencies.jar -i ./testDefinitions.json`    
+
+```
+Checking 'C:\temp\testDefinitions.json'
+Test 0 successful.
+
+Test 1 successful.
+
+Test 2 successful.
+
+Test 3 successful.  
+```
+
