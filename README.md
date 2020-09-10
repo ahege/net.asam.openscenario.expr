@@ -1,7 +1,7 @@
 # OpenSCENARIO Expressions
 
 # Simple Expression Support
-OpenSCEANRIO supports simple mathematical operation for evaluating parameters and literal values. Expressions are notated with the following syntax in XML-files.
+OpenSCENARIO supports simple mathematical operation for evaluating parameters and literal values. Expressions are notated with the following syntax in XML-files.
 ```
 ${expr}
 ```
@@ -21,7 +21,7 @@ Examples for Expressions:
     - ${$numberOfExecutionCount%5}
 *	Expressions with unary minus: 
     - ${-$speed}
-*	Nested Expressions with brackets: 
+*	Nested expressions with brackets: 
     - ${($defaultWidth + 3)/2}
 ## Basic Design Policies
 This fundamental list of requirements must be fullfilled.
@@ -41,6 +41,7 @@ This fundamental list of requirements must be fullfilled.
     - ${(int) $doubleValue}
 * Implicit conversion is applied where information loss is not an issue. 
 * The operators are intentionally limited. Simple operations in a sceanrio file should be possible while complex calculations should not expressed in a scenario file but externally.
+* Other mathematical operators may be added in the future.
 
 ## General implementation restrictions
 OpenSCENARIO may process safety critical data which must guarantee accurate calculation. Explicit conversion between data types that imply data loss must be detected.
@@ -48,7 +49,7 @@ Due to mathematical rules and notations, the implemented evaluation of expressio
 * follow the general rules for arithmetic operator precedence.
 * detect arithmetic errors (Division by zero)
 * detect conversion errors like ${(unsignedShort) 100000} or ${(unsignedShort) -10}
-* avoid internal arithmetic overflow.
+* avoid internal arithmetic overflow or abort with an error.
 
 ## Avoiding internal arithemtic overflow
 The internal datatypes must ensure, that arithmetic overflow is avoided. This may most efficiently and safely achieved when using 64-byte values for internal calculation for integer numbers and using 64 byte double values for floating point value.
