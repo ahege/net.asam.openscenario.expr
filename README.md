@@ -85,7 +85,7 @@ Usage: <filename>
 ## Checking a File
 When checking a file, any defined test int the file is executed (identified by its id). Sucess or error in issued on the command line.
 
-`java -jar net.asam.openscenario.expr-X.Y.Z-jar-with-dependencies.jar -i ./testDefinitions.json`    
+`java -jar net.asam.openscenario.expr-X.Y.Z-jar-with-dependencies.jar ./testDefinitions.json`    
 
 ```
 Checking 'C:\temp\testDefinitions.json'
