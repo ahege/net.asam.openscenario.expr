@@ -45,6 +45,40 @@ Due to mathematical rules and notations, the implemented evaluation of expressio
 *	detect conversion errors like ${(unsignedShort) 100000} or ${(unsignedShort) -10}
 *	avoid arithmetic overflow.
 
+## Avoiding Arithemtic Overflow
+The internal datatypes must ensure, that arithmetic overflow is avoided . This may most efficiently and safely achieved when using 64-byte values for internal calculation for integer numbers and using 64 byte double values for floating point value.
+It is recommended that int, unsingedInt, unsignedShort values are converted into 64 byte integer values for internal calculations.
+Any arithmetic overflow must be avoided or must issue an error for internal calculation. When internal limits (e.g. 64 byte limits for integer values) are reached, the calculation must abort with an error.
+
+E.g. If 64 byte long values are used for internal calculation this expression must abort with an error:
+
+```
+${-2147483648 * -2147483648 * -2147483648}
+```
+E.g. with an error : ```"Internal Overflow (limits of internal 64 bit integer value exceeded)"```
+
+In this way, any internal arithmetic overflow is detected.
+
+## Conversion policies
+Implicit conversion is not a problem when double and 64 byte datatypes are used for internal calculation. 
+* Any integer datatype (int, unsingedInt, unsignedShort) can be safely converted to an 64 byte integer value. 
+* Any integer datatype (int, unsingedInt, unsignedShort) datatype can be safely converted to a 64 byte double value.
+
+### Information loss on conversion
+Conversion from double to an interger value type (int, unsingedInt, unsignedShort) is done by cutting of the digits after the decimal separator (3.45 => 3, -3.54 => -3).
+As there is loss of information when converting from double to an integer datatype, this conversion must be explicit.
+
+E.g. the expression in this example must issue an error (e.g. "Floating point values must be explicitly casted. Use (int), (unsignedInt) or (unsignedShort) for explicit cast.")
+
+```xml
+<ParameterDeclaration parameterType="unsignedInt" name="numberOfExecutions" value="${34+3.45}"/>
+```
+This is the right way to do explicit conversion.
+
+```xml
+<ParameterDeclaration parameterType="unsignedInt" name="numberOfExecutions" value="${(unsignedInt) (34+3.45)}"/>
+```
+
 # About this implementation
 This is a test implementation as a proof of concept for the expression language. It includes basic tests as well as the possibility to include test descriptions and test them with a command line tool.
 
