@@ -1,11 +1,13 @@
 [{
 	"id" : 0,
+	"comment" : "test internal  calculation maximal value for unsignedShort +1 (65535+1)",
 	"parameterDefinitions": ["unsignedShort testShort = 65535;"],
 	"expr": "${$testShort +1}",
 	"expectedValue": 65536
 },{
 
 	"id" : 1,
+	"comment" : "Expect error when explicitly casting 65535+1 to unsignedShort",
 	"parameterDefinitions": ["unsignedShort testShort = 65535;"],
 	"expr": "${(unsignedShort) ($testShort +1)}",
 	"expectedError": {
@@ -14,6 +16,7 @@
 	}
 },{
 	"id" : 2,
+	"comment" : "Calculate a complex formuls (Tested in Excel to verify)",
 	"parameterDefinitions": ["double delay=23.1;",
 	"double speed= 4.333;",
 	"int x0= 1;",
@@ -24,10 +27,12 @@
 	"expectedValue": 23.56157396722825
 },{
 	"id" : 3,
+	"comment" : "Test oeprator precedence for +/*",
 	"expr": "${4+6*5}",
 	"expectedValue": 34
 },{
 	"id" : 4,
+	"comment" : "Expect error when explicitly casting 66000 to unsignedShort",
 	"expr": "${(unsignedShort) 66000}",
 	"expectedError": {
 		"message": "Value '66000' cannot be converted to type 'unsignedShort'",
@@ -35,17 +40,20 @@
 	}
 },{
 	"id" : 5,
+	"comment" : "Test cutting off digits for positive double when converting to an integer",
 	"parameterDefinitions": ["double value= 65.5;"],
 	"expr": "${(int) ($value +1)}",
 	"expectedValue": 66
 },{
 	"expectedDatatype" : "int",
 	"id" : 6,
+	"comment" : "Test cutting off digits for negative double when converting to an integer",
 	"parameterDefinitions": ["double value= -65.5;"],
 	"expr": "${(int) ($value -1 )}",
 	"expectedValue": -66
 },{
 	"id" : 7,
+	"comment" : "Expect error when not explicitly form a floating point value to an integer type.",
 	"parameterDefinitions": ["double value= -65.5;"],
 	"expectedDatatype" : "int",
 	"expr": "${$value +1}",
@@ -55,6 +63,7 @@
 	}
 },{
 	"id" : 8,
+	"comment" : "Division by zero, floating point type",
 	"parameterDefinitions": ["double value= 0.0;"],
 	"expr": "${25/$value}",
 	"expectedError": {
@@ -63,6 +72,7 @@
 	}
 },{
 	"id" : 9,
+	"comment" : "Division by zero, unsignedInt type",
 	"parameterDefinitions": ["unsignedInt value= 0;"],
 	"expr": "${25/$value}",
 	"expectedError": {
@@ -71,7 +81,17 @@
 	}
 },{
 	"id" : 10,
-	"parameterDefinitions": ["unsignedInt value= 0;"],
+	"comment" : "Division by zero, int type",
+	"parameterDefinitions": ["int value= 0;"],
+	"expr": "${25/$value}",
+	"expectedError": {
+		"message": "Divison by zero",
+		"column": 5
+	}
+},{
+	"id" : 10,
+	"comment" : "Division by zero, unsignedShort type",
+	"parameterDefinitions": ["unsignedShort value= 0;"],
 	"expr": "${25/$value}",
 	"expectedError": {
 		"message": "Divison by zero",
