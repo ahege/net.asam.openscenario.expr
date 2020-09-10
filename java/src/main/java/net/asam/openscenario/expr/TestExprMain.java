@@ -23,7 +23,9 @@ public class TestExprMain {
       {
         System.out.println("Usage: TestExprMain <inputFile>" ); 
       }
-      List<TestSpecification> tests = TestSpecificationReader.readFromJson(new File(args[0]));
+      File inputFile = new File(args[0]);
+      System.out.println(String.format("Checking '%s'", inputFile.getAbsolutePath()) ); 
+      List<TestSpecification> tests = TestSpecificationReader.readFromJson(inputFile);
       ExprTestRunner.runTest(
           tests,
           new ErrorLogger() {
