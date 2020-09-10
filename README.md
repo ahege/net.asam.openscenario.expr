@@ -40,8 +40,13 @@ This fundamental list of requirements must be fullfilled.
 # General Implementation Restrictions
 OpenSCENARIO may process safety critical data which must guarantee accurate calculation. Explicit conversion between data types that imply data loss must be detected.
 Due to mathematical rules and notations, the implemented evaluation of expression must:
--	follow the general rules for arithmetic operator precedence.
+*	follow the general rules for arithmetic operator precedence.
+*	detect arithmetic errors (Division by zero)
+*	detect conversion errors like ${(unsignedShort) 100000} or ${(unsignedShort) -10}
+*	avoid arithmetic overflow.
 
+## About this implementation
+This is a test implementation as a prrof of concept for the expression language. It includes basic tests as well as the possibility to include test descriptions and test them with a command line tool.
 
 # Building the Sources
 ## JAVA
@@ -61,3 +66,4 @@ Three packages are built in the `target` folder.
 | de.rac.openscenario.expr-X.Y.Z-javadoc.jar | The javadoc documentation|
 
 # Executing the TestMain
+Te
