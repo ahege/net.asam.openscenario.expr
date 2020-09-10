@@ -37,7 +37,7 @@ This fundamental list of requirements must be fullfilled.
 *	Nested Expressions with brackets are supported.
 *	Explicit conversion is supported. Implicit conversion is applied where information loss is not an issue. 
 *	The operators are intentionally limited. Simple operations in a sceanrio file should be possible while complex calculations should not expressed in a scenario file but externally.
-## General Implementation Restrictions
+## General implementation restrictions
 OpenSCENARIO may process safety critical data which must guarantee accurate calculation. Explicit conversion between data types that imply data loss must be detected.
 Due to mathematical rules and notations, the implemented evaluation of expression must:
 *	follow the general rules for arithmetic operator precedence.
@@ -45,7 +45,7 @@ Due to mathematical rules and notations, the implemented evaluation of expressio
 *	detect conversion errors like ${(unsignedShort) 100000} or ${(unsignedShort) -10}
 *	avoid arithmetic overflow.
 
-## Avoiding Arithemtic Overflow
+## Avoiding internal arithemtic overflow
 The internal datatypes must ensure, that arithmetic overflow is avoided . This may most efficiently and safely achieved when using 64-byte values for internal calculation for integer numbers and using 64 byte double values for floating point value.
 It is recommended that int, unsingedInt, unsignedShort values are converted into 64 byte integer values for internal calculations.
 Any arithmetic overflow must be avoided or must issue an error for internal calculation. When internal limits (e.g. 64 byte limits for integer values) are reached, the calculation must abort with an error.
@@ -65,7 +65,7 @@ Implicit conversion is not a problem when double and 64 byte datatypes are used 
 * Any integer datatype (int, unsingedInt, unsignedShort) datatype can be safely converted to a 64 byte double value.
 
 ### Information loss on conversion
-Conversion from double to an interger value type (int, unsingedInt, unsignedShort) is done by cutting of the digits after the decimal separator (3.45 => 3, -3.54 => -3).
+Conversion from double to an interger value type (int, unsingedInt, unsignedShort) is done by cutting off the digits after the decimal separator (3.45 => 3, -3.54 => -3).
 As there is loss of information when converting from double to an integer datatype, this conversion must be explicit.
 
 E.g. the expression in this example must issue an error (e.g. "Floating point values must be explicitly casted. Use (int), (unsignedInt) or (unsignedShort) for explicit cast.")
@@ -84,7 +84,7 @@ This is a test implementation as a proof of concept for the expression language.
 
 The project is in incubation status and is not intended to be included in production mode projects.
 
-# Building the Sources
+# Building the sources
 ## JAVA
 * Clone the master branch (the `java` path from this project)
 * Install maven
@@ -100,7 +100,7 @@ Three packages are built in the `target` folder.
 | de.rac.openscenario.expr-X.Y.Z.jar | A package that includes the compiled source code |
 | de.rac.openscenario.expr-X.Y.Z-jar-with-dependencies.jar | A package that includes the compiled source code with any dependency embedded. |
 
-# Executing the Tester
+# Executing the tester
 The binaries may either be build with maven or downloaded [here](https://github.com/ahege/net.asam.openscenario.expr/tree/master/download):
 
 The tester tools checks both:
@@ -118,7 +118,7 @@ The main class (net.asam.openscenario.expr.TestExprMain) is already set. Start w
 ```
 Usage: <filename>
 ```  
-## Checking a File
+## Checking a file
 When checking a file, any defined test int the file is executed (identified by its id). Sucess or error in issued on the command line.
 
 `java -jar net.asam.openscenario.expr-X.Y.Z-jar-with-dependencies.jar ./testDefinitions.json`    
