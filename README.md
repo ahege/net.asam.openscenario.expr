@@ -1,6 +1,6 @@
 # OpenSCENARIO Expressions
 
-## Simple Expression Support
+# Simple Expression Support
 OpenSCEANRIO supports simple mathematical operation for evaluating parameters and literal values. Expressions are notated with the following syntax in XML-files.
 ```
 ${expr}
@@ -23,7 +23,7 @@ Examples for Expressions:
     - ${-$speed}
 *	Nested Expressions with brackets: 
     - ${($defaultWidth + 3)/2}
-# Basic Design Policies
+## Basic Design Policies
 This fundamental list of requirements must be fullfilled.
 *	The use must be as intuitive as possible for the user.
 *	Operators are exclusively supported for numerical value datatypes. For int, unsingedInt, unsignedShort and double datatypes. Not for boolean, string or dateTime datatypes.
@@ -37,7 +37,7 @@ This fundamental list of requirements must be fullfilled.
 *	Nested Expressions with brackets are supported.
 *	Explicit conversion is supported. Implicit conversion is applied where information loss is not an issue. 
 *	The operators are intentionally limited. Simple operations in a sceanrio file should be possible while complex calculations should not expressed in a scenario file but externally.
-# General Implementation Restrictions
+## General Implementation Restrictions
 OpenSCENARIO may process safety critical data which must guarantee accurate calculation. Explicit conversion between data types that imply data loss must be detected.
 Due to mathematical rules and notations, the implemented evaluation of expression must:
 *	follow the general rules for arithmetic operator precedence.
@@ -45,7 +45,7 @@ Due to mathematical rules and notations, the implemented evaluation of expressio
 *	detect conversion errors like ${(unsignedShort) 100000} or ${(unsignedShort) -10}
 *	avoid arithmetic overflow.
 
-## About this implementation
+# About this implementation
 This is a test implementation as a prrof of concept for the expression language. It includes basic tests as well as the possibility to include test descriptions and test them with a command line tool.
 
 The project is in incubation status and is not intended to be included in production mode projects.
@@ -73,6 +73,9 @@ The checker tools checks both:
 * expressions against their expected values
 * expressions against their expected errors.
 
+The file format should be self-explaining Please see [this example](https://github.com/ahege/net.asam.openscenario.expr/blob/master/doc/examples/testDefinitions.json)
+
+## Executing the standalone tool
 The main class (net.asam.openscenario.expr.TestExprMain) is already set. Start with:
 
 `java -jar net.asam.openscenario.expr-X.Y.Z-jar-with-dependencies.jar`
@@ -80,9 +83,7 @@ The main class (net.asam.openscenario.expr.TestExprMain) is already set. Start w
 ```
 Usage: <filename>
 ```  
-## Checking a File
-See [doc/examples/simpleExample](https://github.com/RA-Consulting-GmbH/openscenario.api.test/tree/master/doc/examples/simpleExample)  
-  
+## Checking a File  
 `java -jar net.asam.openscenario.expr-X.Y.Z-jar-with-dependencies.jar -i ./testDefinitions.json`    
 
 ```
