@@ -66,7 +66,7 @@ Three packages are built in the `target` folder.
 | de.rac.openscenario.expr-X.Y.Z.jar | A package that includes the compiled source code |
 | de.rac.openscenario.expr-X.Y.Z-jar-with-dependencies.jar | A package that includes the compiled source code with any dependency embedded. |
 
-# Executing the TestMain
+# Executing the Tester
 The checker tools checks both:
 
 * expressions against their expected values.
