@@ -16,10 +16,6 @@
 					<target>1.8</target>
 					<generatedSourcesDirectory>src/generated/java</generatedSourcesDirectory>
 					<useIncrementalCompilation>false</useIncrementalCompilation>
-					<compilerArgument>-Xlint:all</compilerArgument>
-					<showWarnings>true</showWarnings>
-					<showDeprecation>true</showDeprecation>
-					<failOnWarning>true</failOnWarning>
 				</configuration>
 			</plugin>
 			<plugin>
