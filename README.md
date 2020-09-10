@@ -96,26 +96,81 @@ Test 2 successful.
 Test 3 successful.  
 ```
 ## Errors
-Violations against expected values are issued:
+There are four categories of violations:
 
-For Test definion
+1 Violation against expected values
+2 Violation against expected errors
+3 Unexpected errors
+
+### Expected values
+When the result does not match the expected value, an error is issued:
+
+For Test definition
 ```json
 {
-	"id" : 3,
-	"expr": "${4+6*5}",
-	"expectedValue": 35
+ "id" : 3,
+ "expr": "${4+6*5}",
+ "expectedValue": 35
 }
 ```
+The following error is issued:
 
 ```
-Checking 'C:\temp\testDefinitions.json'
-Test 0 successful.
-
-Test 1 successful.
-
-Test 2 successful.
-
 Error in test 3
 Expected Value: 35
 Actual value: 34
 ```
+### Expected error
+When the expected error does not occur, an error is issued:
+
+Either no error occurs (obviously no Error occurs here):
+
+```json
+{
+ "id" : 4,
+ "expr": "${5/4}",
+ "expectedError": {
+	"message": "Division by zero",
+	"column": 2
+	}
+}
+```
+The following error is issued:
+```
+Error in test 4
+Expected error: Division by zero
+```
+
+Or when another error occurs (obviously the wrong error is expected):
+```json
+{
+ "id" : 4,
+ "expr": "${(unsignedShort) 66000}",
+ "expectedError": {
+	"message": "Division by zero",
+	"column": 2
+	}
+}
+```
+The following error is issued:
+```
+Expected error: Division by zero
+Actual error: Value '66000' cannot be converted to type 'unsignedShort'
+
+```
+
+### Unexpected error
+If an unexpected error occurs, this is also issued:
+```json
+{
+ "id" : 4,
+ "expr": "${(unsignedShort) 66000}",
+ "expectedValue": 66000
+}
+```
+The following error is issued:
+```
+Error in test 4
+Value '66000' cannot be converted to type 'unsignedShort'(2)
+```
+
