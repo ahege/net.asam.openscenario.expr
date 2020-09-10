@@ -50,7 +50,7 @@ The internal datatypes must ensure, that arithmetic overflow is avoided . This m
 It is recommended that int, unsingedInt, unsignedShort values are converted into 64 byte integer values for internal calculations.
 Any arithmetic overflow must be avoided or must issue an error for internal calculation. When internal limits (e.g. 64 byte limits for integer values) are reached, the calculation must abort with an error.
 
-E.g. If 64 byte long values are used for internal calculation this expression must abort with an error:
+E.g. If 64 byte long values are used for internal calculation the expression of the next example must abort with an error, since the limit for 64 byte long values is exceeded.
 
 ```
 ${-2147483648 * -2147483648 * -2147483648}
