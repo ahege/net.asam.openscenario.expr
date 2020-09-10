@@ -46,7 +46,7 @@ Due to mathematical rules and notations, the implemented evaluation of expressio
 *	avoid arithmetic overflow.
 
 # About this implementation
-This is a test implementation as a prrof of concept for the expression language. It includes basic tests as well as the possibility to include test descriptions and test them with a command line tool.
+This is a test implementation as a proof of concept for the expression language. It includes basic tests as well as the possibility to include test descriptions and test them with a command line tool.
 
 The project is in incubation status and is not intended to be included in production mode projects.
 
@@ -65,12 +65,11 @@ Three packages are built in the `target` folder.
 |-|-|
 | de.rac.openscenario.expr-X.Y.Z.jar | A package that includes the compiled source code |
 | de.rac.openscenario.expr-X.Y.Z-jar-with-dependencies.jar | A package that includes the compiled source code with any dependency embedded. |
-| de.rac.openscenario.expr-X.Y.Z-javadoc.jar | The javadoc documentation|
 
-# Executing the TestMain
+# Executing the Tester
 The checker tools checks both:
 
-* expressions against their expected values
+* expressions against their expected values.
 * expressions against their expected errors.
 
 The file format should be self-explaining Please see [this example](https://github.com/ahege/net.asam.openscenario.expr/blob/master/doc/examples/testDefinitions.json)
@@ -86,7 +85,7 @@ Usage: <filename>
 ## Checking a File
 When checking a file, any defined test int the file is executed (identified by its id). Sucess or error in issued on the command line.
 
-`java -jar net.asam.openscenario.expr-X.Y.Z-jar-with-dependencies.jar -i ./testDefinitions.json`    
+`java -jar net.asam.openscenario.expr-X.Y.Z-jar-with-dependencies.jar ./testDefinitions.json`    
 
 ```
 Checking 'C:\temp\testDefinitions.json'
