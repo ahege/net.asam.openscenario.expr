@@ -107,20 +107,23 @@ public class ExprTestRunner {
             }
             parseTreeWalker.walk(baseListener, progContext);
             baseListener.getResult();
+            StringBuffer errors = new StringBuffer();
+            errors.append("Expected error: " + test.getExpectedError());
+            issueError(test.getId(), errors.toString(), errorLogger);
             
           } catch (SemanticError error) {
             boolean isColumnConsistent = test.getExpectedErrorColumn() == error.getColumn();
-            boolean IsMessageConsistent = test.getExpectedError().equals(error.getMessage());
-            if (!IsMessageConsistent || !isColumnConsistent) {
+            boolean isMessageConsistent = test.getExpectedError().equals(error.getMessage());
+            if (!isMessageConsistent || !isColumnConsistent) {
               isSuccessfull = false;
               StringBuffer errors = new StringBuffer();
 
-              if (!IsMessageConsistent) {
-                errors.append("Expected error:" + test.getExpectedError());
+              if (!isMessageConsistent) {
+                errors.append("Expected error: " + test.getExpectedError());
                 errors.append("\nActual error: " + error.getMessage());
               }
               if (!isColumnConsistent) {
-                if(!IsMessageConsistent)
+                if(!isMessageConsistent)
                 {
                   errors.append("\n");
                 }

@@ -82,20 +82,26 @@ public class EvaluatorListener extends OscExprBaseListener {
    */
   private ExprValue convert(ExprValue firstExprValue, String typeCastString, int column)
       throws SemanticError {
+    ExprValue result = null;
     if (typeCastString.contentEquals("int")) {
-      return firstExprValue.convertToInt();
+      result =  firstExprValue.convertToInt();
     } else if (typeCastString.contentEquals("unsignedInt")) {
-      return firstExprValue.convertToUnsignedInt();
+      result = firstExprValue.convertToUnsignedInt();
     } else if (typeCastString.contentEquals("unsignedShort")) {
-      return firstExprValue.convertToUnsignedShort();
+      result = firstExprValue.convertToUnsignedShort();
     } else if (typeCastString.contentEquals("double")) {
-      return firstExprValue.convertToDouble();
+      result =  firstExprValue.convertToDouble();
     }
-    throw new SemanticError(
-        String.format(
-            "Value '%s' cannot be converted to type '%s'",
-            firstExprValue.toString(), typeCastString),
-        column);
+    if(result == null)
+    {
+      throw new SemanticError(
+          String.format(
+              "Value '%s' cannot be converted to type '%s'",
+              firstExprValue.toString(), typeCastString),
+          column);
+    }
+    return result;
+    
   }
   /**
    * {@inheritDoc}

@@ -24,13 +24,15 @@ public class TestSpecification {
    * @param expectedError
    * @param expectedErrorColumn
    * @param parameterDefinitions
+   * @param expectedDatatype 
    */
   public TestSpecification(
       int id,
       String expr,
       String expectedError,
       int expectedErrorColumn,
-      Hashtable<String, ExprValue> parameterDefinitions) {
+      Hashtable<String, ExprValue> parameterDefinitions,
+      ExprType expectedDatatype) {
     super();
     this.id = id;
     this.expr = expr;
@@ -38,6 +40,7 @@ public class TestSpecification {
     this.expectedError = expectedError;
     this.expectedErrorColumn = expectedErrorColumn;
     this.parameterDefinitions = parameterDefinitions;
+    this.expectedDatatype = expectedDatatype;
   }
 
   /**

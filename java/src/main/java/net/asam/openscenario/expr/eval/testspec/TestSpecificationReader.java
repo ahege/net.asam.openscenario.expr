@@ -63,15 +63,7 @@ public class TestSpecificationReader {
           expectedExprValue =
               ExprValue.createUnknownNumericLongValue(testObject.getLong("expectedValue"));
         }
-        ExprType exprType = null;
-        if (!testObject.isNull("expectedDatatype")) {
-          String expectedDatatypeString = testObject.getString("expectedDatatype");
-          exprType = ExprType.fromString(expectedDatatypeString);
-          if (exprType == null) {
-            throw new IOException(
-                String.format("Unknown datatype '%s' in input file", expectedDatatypeString));
-          }
-        }
+        ExprType exprType= getExpectedDatatype(testObject);
         result.add(new TestSpecification(id, expr, expectedExprValue, definedParameters, exprType));
 
       } else {
@@ -79,12 +71,33 @@ public class TestSpecificationReader {
         JSONObject errorObject = testObject.getJSONObject("expectedError");
         expectedErrorMessage = errorObject.getString("message");
         expectedErrorColumn = errorObject.getInt("column");
+        ExprType exprType= getExpectedDatatype(testObject);
         result.add(
             new TestSpecification(
-                id, expr, expectedErrorMessage, expectedErrorColumn, definedParameters));
+                id, expr, expectedErrorMessage, expectedErrorColumn, definedParameters,exprType));
       }
     }
 
+    return result;
+  }
+
+  /**
+   * @param testObject
+   * @param exprType
+   * @return
+   * @throws IOException
+   */
+  private static ExprType getExpectedDatatype(JSONObject testObject)
+      throws IOException {
+    ExprType result = null;
+    if (!testObject.isNull("expectedDatatype")) {
+      String expectedDatatypeString = testObject.getString("expectedDatatype");
+      result = ExprType.fromString(expectedDatatypeString);
+      if (result == null) {
+        throw new IOException(
+            String.format("Unknown datatype '%s' in input file", expectedDatatypeString));
+      }
+    }
     return result;
   }
 }
