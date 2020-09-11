@@ -12,13 +12,14 @@ Example:
 
 Examples for Expressions:
 *	Expressions that contains number and floating point literals like 
-    - ${-15 + 3.14 + 23 + 2.1E-7 }
+    - ${-15 + 3.14 + 23 + 2.1E-7 + sqrt(9)}
 *	Expressions that further contain parameter values like 
     - ${$defaultWidth +3} 
-*	Expressions with +,-,*,% operators like 
-    - 	${$defaultWidth + 3/2}
-    -  ${4*3 -$counter} 
+*	Expressions with +,-,*,% operators or sqrt function like 
+    - ${$defaultWidth + 3/2}
+    - ${4*3 -$counter} 
     - ${$numberOfExecutionCount%5}
+    - ${sqrt(2* $acceleration * $distance)}
 *	Expressions with unary minus: 
     - ${-$speed}
 *	Nested expressions with brackets: 
@@ -28,6 +29,7 @@ This fundamental list of requirements must be fullfilled.
 * The use must be as intuitive as possible for the user.
 * Operators are exclusively supported for numerical value datatypes. For int, unsingedInt, unsignedShort and double datatypes. Not for boolean, string or dateTime datatypes.
 * The following operators are supported (in the order of operator precedence)
+    - Square root function (sqrt)
     - Unary Minus, negating a number (-)
     - Multiply operator (*)
     - Division operator (/)
@@ -41,13 +43,13 @@ This fundamental list of requirements must be fullfilled.
     - ${(int) $doubleValue}
 * Implicit conversion is applied where information loss is not an issue. 
 * The operators are intentionally limited. Simple operations in a sceanrio file should be possible while complex calculations should not expressed in a scenario file but externally.
-* Other mathematical operators may be added in the future.
+* Other mathematical operators/functions might be added in the future.
 
 ## General implementation restrictions
 OpenSCENARIO may process safety critical data which must guarantee accurate calculation. Explicit conversion between data types that imply data loss must be detected.
 Due to mathematical rules and notations, the implemented evaluation of expression must:
 * follow the general rules for arithmetic operator precedence.
-* detect arithmetic errors (Division by zero)
+* detect arithmetic errors (Division by zero, sqrt of a negative value.)
 * detect conversion errors like ${(unsignedShort) 100000} or ${(unsignedShort) -10}
 * avoid internal arithmetic overflow or abort with an error.
 
