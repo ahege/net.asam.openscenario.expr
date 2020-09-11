@@ -15,10 +15,11 @@ Examples for Expressions:
     - ${-15 + 3.14 + 23 + 2.1E-7 + sqrt(9)}
 *	Expressions that further contain parameter values like 
     - ${$defaultWidth +3} 
-*	Expressions with +,-,*,% operators like 
-    - 	${$defaultWidth + 3/2}
-    -  ${4*3 -$counter} 
+*	Expressions with +,-,*,% operators or sqrt function like 
+    - ${$defaultWidth + 3/2}
+    - ${4*3 -$counter} 
     - ${$numberOfExecutionCount%5}
+    - ${sqrt(2* $acceleration * $distance)}
 *	Expressions with unary minus: 
     - ${-$speed}
 *	Nested expressions with brackets: 
