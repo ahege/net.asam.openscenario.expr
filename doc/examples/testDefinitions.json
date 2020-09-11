@@ -131,5 +131,14 @@
 		"message": "Cannot calculate square root from a negative value.",
 		"column": 7
 	}
+},{
+	"id" : 16,
+	"comment": "Complex formular with sqrt Sqrt of a positive integer  value ",
+	"parameterDefinitions": [
+		"double acceleration=2.0;",
+		"double distance=4.0;"
+	],
+	"expr": "${sqrt(2* $acceleration * $distance)}",
+	"expectedValue": 4.0
 }
 ]
