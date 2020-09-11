@@ -9,7 +9,9 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 
 import net.asam.expr.grammar.OscExprBaseListener;
+import net.asam.expr.grammar.OscExprLexer;
 import net.asam.expr.grammar.OscExprParser;
+import net.asam.expr.grammar.OscExprParser.FunctionContext;
 import net.asam.openscenario.expr.ExprType;
 import net.asam.openscenario.expr.ExprValue;
 import net.asam.openscenario.expr.SemanticError;
@@ -101,6 +103,30 @@ public class EvaluatorListener extends OscExprBaseListener {
           column);
     }
     return result;
+    
+  }
+  
+  @Override
+  public void exitFunction(FunctionContext ctx) {
+    ExprValue firstExprValue = this.valueStack.pop();
+    ExprValue result = null;
+    // If for future use with more functions
+    if (ctx.func.getType() == OscExprLexer.SQRT)
+    {
+      double firstValue = -1;
+      if (firstExprValue.isFloatingPointNumeric()) {
+        firstValue = firstExprValue.getConvertedDoubleValue();      
+      } else {
+        // is Integer Numeric
+        firstValue = firstExprValue.getConvertedDoubleValue();
+      }
+      if (firstValue < 0.0) {
+        throw new SemanticError(
+            "Cannot calculate square root from a negative value.", getColumn((ParserRuleContext) ctx.getChild(2)));
+      }
+      result = ExprValue.createDoubleValue(Math.sqrt(firstValue));
+      this.valueStack.push(result);
+    }
     
   }
   /**

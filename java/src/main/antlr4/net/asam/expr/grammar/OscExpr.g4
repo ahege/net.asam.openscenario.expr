@@ -3,7 +3,8 @@ grammar OscExpr;
 /** The start rule; begin parsing here. */
 prog:   '${' expr '}'; 
 
-expr: '(' type=TYPECAST ')' expr # Typecast
+expr:   func=SQRT '(' expr ')' # Function
+        | '(' type=TYPECAST ')' expr # Typecast
 	| MINUS expr	 # UnaryMinus
 	| expr op=(MULTIPLY | DIVIDE | MODULO) expr # MultiDivMod
 	| expr op=(PLUS|MINUS) expr # PlusMinus
@@ -12,6 +13,7 @@ expr: '(' type=TYPECAST ')' expr # Typecast
 	| '(' expr ')'  # SquaredExpr
 	;
 
+SQRT: 'sqrt';
 TYPECAST :  ('int'|'double'| 'unsignedInt' | 'unsignedShort');
 ID  :   '$'[a-zA-Z_][a-zA-Z0-9_]* ;
 NUMBER_LITERAL

@@ -23,8 +23,8 @@
 	"int x1=2;",
 	"int y0=3;",
 	"int y1=4;"],
-	"expr": "${$delay + ((($x1 - $x0)*(int) 2 + ($y1 - $y0)*2 )*0.5 / $speed)}",
-	"expectedValue": 23.56157396722825
+	"expr": "${$delay + ((($x1 - $x0)*(int) 2 + ($y1 - $y0)*2 )*0.5 / $speed) + sqrt(9)}",
+	"expectedValue": 26.56157396722825
 },{
 	"id" : 3,
 	"comment" : "Test oeprator precedence for +/*",
@@ -104,6 +104,32 @@
 	"expectedError": {
 		"message": "Internal Overflow (limits of internal 64 bit integer value exceeded)",
 		"column": 28
+	}
+},{
+	"id" : 12,
+	"comment": "Sqrt of a positive floating point value ",
+	"expr": "${sqrt(6.25)}",
+	"expectedValue": 2.5
+},{
+	"id" : 13,
+	"comment": "Sqrt of a positive integer  value ",
+	"expr": "${sqrt(9)}",
+	"expectedValue": 3.0
+},{
+	"id" : 14,
+	"comment": "Sqrt of a negative integer value",
+	"expr": "${sqrt(-9)}",
+	"expectedError": {
+		"message": "Cannot calculate square root from a negative value.",
+		"column": 7
+	}
+},{
+	"id" : 15,
+	"comment": "Sqrt of a negative floating point value",
+	"expr": "${sqrt(-9.0)}",
+	"expectedError": {
+		"message": "Cannot calculate square root from a negative value.",
+		"column": 7
 	}
 }
 ]
