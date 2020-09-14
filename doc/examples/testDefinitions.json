@@ -133,12 +133,153 @@
 	}
 },{
 	"id" : 16,
-	"comment": "Complex formular with sqrt Sqrt of a positive integer  value ",
+	"comment": "Complex formular with sqrt Sqrt of a positive integer value ",
 	"parameterDefinitions": [
 		"double acceleration=2.0;",
 		"double distance=4.0;"
 	],
-	"expr": "${sqrt(2* $acceleration * $distance)}",
+	"expr": "${sqrt(2 * $acceleration * $distance)}",
 	"expectedValue": 4.0
+},{
+	"id" : 17,
+	"comment": "Power floating point value by an integer value",
+	"expr": "${pow(2.5, 2)}",
+	"expectedValue": 6.25
+},{
+	"id" : 18,
+	"comment": "Power floating point value by a floating point value",
+	"expr": "${pow(6.25, 0.5)}",
+	"expectedValue": 2.5
+},{
+	"id" : 19,
+	"comment": "Power integer value by a floating point value",
+	"expr": "${pow(4, 0.5)}",
+	"expectedValue": 2
+},{
+	"id" : 20,
+	"comment": "Power integer value by an integer value",
+	"expr": "${pow(4, 2)}",
+	"expectedValue": 16
+},{
+	"id" : 21,
+	"comment": "Raising the value 0 to an exponent < 0",
+	"expr": "${pow(0,-0.5)}",
+	"expectedError": {
+		"message": "Raising the value 0 to an exponent < 0 is not allowed",
+		"column": 6
+	}
+},{
+	"id" : 22,
+	"comment": "Raising a negative basis to an exponent that is not 0 or 1 or -1",
+	"expr": "${pow(-3,-0.5)}",
+	"expectedError": {
+		"message": "Raising a negative basis to an exponent that is not 0 or 1 or -1 is not allowed",
+		"column": 6
+	}
+},{
+	"id" : 23,
+	"comment": "Raising a negative basis to an exponent that is not 0 or 1 or -1)",
+	"expr": "${pow(-3,0.5)}",
+	"expectedError": {
+		"message": "Raising a negative basis to an exponent that is not 0 or 1 or -1 is not allowed",
+		"column": 6
+	}
+},{
+	"id" : 24,
+	"comment": "Raising a negative basis to an exponent that is 0 or 1 or -1",
+	"expr": "${pow(-4, 1) + pow(-4, -1) * pow(-4, 0)}",
+	"expectedValue": -4.25
+},{
+	"id" : 25,
+	"comment": "Raising the value 0 to an exponent >= 0",
+	"expr": "${pow(0, 0) + pow(0, 20) }",
+	"expectedValue": 1
+},{
+	"id" : 26,
+	"comment": "Raising the value 0 to an exponent 0",
+	"expr": "${pow(0, 0)}",
+	"expectedValue": 1
+},{
+	"id" : 27,
+	"comment": "Raising the value 0 to an exponent > 0",
+	"expr": "${pow(0, 20)}",
+	"expectedValue": 0
+},{
+	"id" : 28,
+	"comment": "Parsing a integer value that exceeds internal limits ",
+	"expr": "${9223372036854775808}",
+	"expectedError": {
+		"message": "Internal Overflow (limits of internal 64 bit integer value exceeded)",
+		"column": 2
+	}
+},{
+	"id" : 29,
+	"comment": "Parsing a floating point value that exceeds internal limits ",
+	"expr": "${1.7976931348623158E308}",
+	"expectedError": {
+		"message": "Internal Overflow (limits of internal 64 bit integer value exceeded)",
+		"column": 2
+	}
+},{
+	"id" : 29,
+	"comment": "Parsing a floating point value that exceeds internal limits ",
+	"expr": "${1.7976931348623157E308 + 1E308}",
+	"expectedError": {
+		"message": "Internal Overflow (limits of internal 64 bit integer value exceeded)",
+		"column": 25
+	}
+},{
+	"id" : 30,
+	"comment": "Parsing a floating point value that exceeds internal limits ",
+	"expr": "${-1.7976931348623157E308 -1}",
+	"expectedError": {
+		"message": "Internal Overflow (limits of internal 64 bit integer value exceeded)",
+		"column": 26
+	}
+},{
+	"id" : 31,
+	"comment": "Parsing a floating point value that exceeds internal limits ",
+	"expr": "${4.89E-324}",
+	"expectedError": {
+		"message": "Internal Overflow (limits of internal 64 bit integer value exceeded)",
+		"column": 2
+	}
+},{
+	"id" : 32,
+	"comment": "Parsing a floating point value that exceeds internal limits ",
+	"expr": "${4.9E-324 -1E-324 }",
+	"expectedError": {
+		"message": "Internal Overflow (limits of internal 64 bit integer value exceeded)",
+		"column": 12
+	}
+},{
+	"id" : 32,
+	"comment": "Parsing a floating point value that exceeds internal limits ",
+	"expr": "${-4.9E-324 +1E-324 }",
+	"expectedError": {
+		"message": "Internal Overflow (limits of internal 64 bit integer value exceeded)",
+		"column": 13
+	}
+},{
+	"id" : 33,
+	"comment": "Minmal double value",
+	"expr": "${4.9E-324}",
+	"expectedValue": 4.9E-324
+},
+{
+	"id" : 33,
+	"comment": "Minmal double value",
+	"expr": "${-4.9E-324}",
+	"expectedValue": -4.9E-324
+},
+{
+	"id" : 34,
+	"comment": "Pow over Double limits",
+	"expr": "${pow(1.7976931348623157E308 , 1.7976931348623157E308)}",
+	"expectedError": {
+		"message": "The result of the pow operation ins infinite or NaN",
+		"column": 6
+	}
 }
+
 ]

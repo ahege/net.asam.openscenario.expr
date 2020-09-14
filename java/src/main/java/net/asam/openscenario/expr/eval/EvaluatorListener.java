@@ -2,6 +2,7 @@
 package net.asam.openscenario.expr.eval;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Hashtable;
 import java.util.Stack;
 
@@ -11,7 +12,8 @@ import org.antlr.v4.runtime.Token;
 import net.asam.expr.grammar.OscExprBaseListener;
 import net.asam.expr.grammar.OscExprLexer;
 import net.asam.expr.grammar.OscExprParser;
-import net.asam.expr.grammar.OscExprParser.FunctionContext;
+import net.asam.expr.grammar.OscExprParser.FunctionOneArgumentContext;
+import net.asam.expr.grammar.OscExprParser.FunctionTwoArgumentsContext;
 import net.asam.openscenario.expr.ExprType;
 import net.asam.openscenario.expr.ExprValue;
 import net.asam.openscenario.expr.SemanticError;
@@ -24,10 +26,11 @@ public class EvaluatorListener extends OscExprBaseListener {
   private Stack<ExprValue> valueStack = new Stack<>();
 
   private ExprType expectedDatatype;
-  
-  private static final BigDecimal maxLong = new BigDecimal(Long.MAX_VALUE);
-  private static final BigDecimal minLong = new BigDecimal(Long.MIN_VALUE);
-  
+
+  private static final BigDecimal maxLong = BigDecimal.valueOf(Long.MAX_VALUE);
+  private static final BigDecimal minLong = BigDecimal.valueOf(Long.MIN_VALUE);
+  private static final BigDecimal maxDouble = BigDecimal.valueOf(Double.MAX_VALUE);
+  private static final BigDecimal minDouble = BigDecimal.valueOf(Double.MIN_VALUE);
 
   /**
    * @param definedParameters
@@ -86,16 +89,15 @@ public class EvaluatorListener extends OscExprBaseListener {
       throws SemanticError {
     ExprValue result = null;
     if (typeCastString.contentEquals("int")) {
-      result =  firstExprValue.convertToInt();
+      result = firstExprValue.convertToInt();
     } else if (typeCastString.contentEquals("unsignedInt")) {
       result = firstExprValue.convertToUnsignedInt();
     } else if (typeCastString.contentEquals("unsignedShort")) {
       result = firstExprValue.convertToUnsignedShort();
     } else if (typeCastString.contentEquals("double")) {
-      result =  firstExprValue.convertToDouble();
+      result = firstExprValue.convertToDouble();
     }
-    if(result == null)
-    {
+    if (result == null) {
       throw new SemanticError(
           String.format(
               "Value '%s' cannot be converted to type '%s'",
@@ -103,31 +105,72 @@ public class EvaluatorListener extends OscExprBaseListener {
           column);
     }
     return result;
-    
   }
-  
+
   @Override
-  public void exitFunction(FunctionContext ctx) {
+  public void exitFunctionOneArgument(FunctionOneArgumentContext ctx) {
     ExprValue firstExprValue = this.valueStack.pop();
     ExprValue result = null;
     // If for future use with more functions
-    if (ctx.func.getType() == OscExprLexer.SQRT)
-    {
+    if (ctx.func.getType() == OscExprLexer.SQRT) {
       double firstValue = -1;
       if (firstExprValue.isFloatingPointNumeric()) {
-        firstValue = firstExprValue.getConvertedDoubleValue();      
+        firstValue = firstExprValue.getConvertedDoubleValue();
       } else {
         // is Integer Numeric
         firstValue = firstExprValue.getConvertedDoubleValue();
       }
       if (firstValue < 0.0) {
         throw new SemanticError(
-            "Cannot calculate square root from a negative value.", getColumn((ParserRuleContext) ctx.getChild(2)));
+            "Cannot calculate square root from a negative value.",
+            getColumn((ParserRuleContext) ctx.getChild(2)));
       }
       result = ExprValue.createDoubleValue(Math.sqrt(firstValue));
       this.valueStack.push(result);
     }
-    
+  }
+
+  @Override
+  public void exitFunctionTwoArguments(FunctionTwoArgumentsContext ctx) {
+    ExprValue secondExprValue = this.valueStack.pop();
+    ExprValue firstExprValue = this.valueStack.pop();
+    ExprValue result = null;
+    // If for future use with more functions
+    if (ctx.func.getType() == OscExprLexer.POW) {
+      double firstValue = -1;
+      double secondValue = -1;
+      if (firstExprValue.isFloatingPointNumeric()) {
+        firstValue = firstExprValue.getConvertedDoubleValue();
+      } else {
+        // is Integer Numeric
+        firstValue = firstExprValue.getConvertedDoubleValue();
+      }
+      if (secondExprValue.isFloatingPointNumeric()) {
+        secondValue = secondExprValue.getConvertedDoubleValue();
+      } else {
+        // is Integer Numeric
+        secondValue = secondExprValue.getConvertedDoubleValue();
+      }
+      if (firstValue < 0.0 && secondValue != 0.0 && secondValue != 1.0 && secondValue != -1.0) {
+        throw new SemanticError(
+            "Raising a negative basis to an exponent that is not 0 or 1 or -1 is not allowed",
+            getColumn((ParserRuleContext) ctx.getChild(2)));
+      }
+      if (firstValue == 0.0 && secondValue < 0) {
+        throw new SemanticError(
+            "Raising the value 0 to an exponent < 0 is not allowed",
+            getColumn((ParserRuleContext) ctx.getChild(2)));
+      }
+      double powResult = Math.pow(firstValue, secondValue);
+      if (Double.isInfinite(powResult) || Double.isNaN(powResult)) {
+        throw new SemanticError(
+            "The result of the pow operation ins infinite or NaN",
+            getColumn((ParserRuleContext) ctx.getChild(2)));
+      }
+
+      result = ExprValue.createDoubleValue(powResult);
+      this.valueStack.push(result);
+    }
   }
   /**
    * {@inheritDoc}
@@ -137,11 +180,15 @@ public class EvaluatorListener extends OscExprBaseListener {
   @Override
   public void exitNumLiteral(OscExprParser.NumLiteralContext ctx) {
     // try to parse long value first
-    try {
-      this.valueStack.push(ExprValue.createUnknownNumericLongValue(Long.parseLong(ctx.getText())));
-    } catch (NumberFormatException e) {
+    BigDecimal bigDecimal = new BigDecimal(ctx.getText());
+    if (bigDecimal.scale() == 0) {
+      testOutOfRange(bigDecimal, ctx.num);
+      this.valueStack.push(ExprValue.createUnknownNumericLongValue(bigDecimal.longValue()));
+
+    } else {
+      testOutOfRangeDouble(bigDecimal, ctx.num);
       // It must be a double
-      this.valueStack.push(ExprValue.createDoubleValue(Double.parseDouble(ctx.getText())));
+      this.valueStack.push(ExprValue.createDoubleValue(bigDecimal.doubleValue()));
     }
   }
 
@@ -170,13 +217,13 @@ public class EvaluatorListener extends OscExprBaseListener {
       if (firstExprValue.isFloatingPointNumeric() || secondExprValue.isFloatingPointNumeric()) {
         Double firstValue = firstExprValue.getConvertedDoubleValue();
         Double secondValue = secondExprValue.getConvertedDoubleValue();
+        testOutOfRangeDouble(BigDecimal.valueOf(firstValue).add(BigDecimal.valueOf(secondValue)), ctx.op);
         result = ExprValue.createDoubleValue(firstValue + secondValue);
       } else if (firstExprValue.isIntegerNumeric() && secondExprValue.isIntegerNumeric()) {
         Long firstValue = firstExprValue.getConvertedLongValue();
         Long secondValue = secondExprValue.getConvertedLongValue();
         // Test for overflow
-        testOutOfRange(new BigDecimal(firstValue).add(new BigDecimal(secondValue)), ctx.op);
-         
+        testOutOfRange(BigDecimal.valueOf(firstValue).add(BigDecimal.valueOf(secondValue)), ctx.op);       
         result = ExprValue.cloneIntegerNumericExprValue(firstExprValue, firstValue + secondValue);
       }
     } else // MINUS
@@ -184,15 +231,14 @@ public class EvaluatorListener extends OscExprBaseListener {
       if (firstExprValue.isFloatingPointNumeric() || secondExprValue.isFloatingPointNumeric()) {
         Double firstValue = firstExprValue.getConvertedDoubleValue();
         Double secondValue = secondExprValue.getConvertedDoubleValue();
+        testOutOfRangeDouble(BigDecimal.valueOf(firstValue).subtract(BigDecimal.valueOf(secondValue)), ctx.op);
         result = ExprValue.createDoubleValue(firstValue - secondValue);
       } else if (firstExprValue.isIntegerNumeric() && secondExprValue.isIntegerNumeric()) {
         Long firstValue = firstExprValue.getConvertedLongValue();
         Long secondValue = secondExprValue.getConvertedLongValue();
         // Test for overflow
-        BigDecimal firstBigDecimal = new BigDecimal(firstValue);
-        BigDecimal secondBigDecimal = new BigDecimal(secondValue);
-        testOutOfRange(new BigDecimal(firstValue).subtract(new BigDecimal(secondValue)), ctx.op);
-
+        testOutOfRange(BigDecimal.valueOf(firstValue).subtract(BigDecimal.valueOf(secondValue)), ctx.op);
+        
         result = ExprValue.cloneIntegerNumericExprValue(firstExprValue, firstValue - secondValue);
       }
     }
@@ -219,11 +265,12 @@ public class EvaluatorListener extends OscExprBaseListener {
       if (firstExprValue.isFloatingPointNumeric() || secondExprValue.isFloatingPointNumeric()) {
         Double firstValue = firstExprValue.getConvertedDoubleValue();
         Double secondValue = secondExprValue.getConvertedDoubleValue();
+        testOutOfRangeDouble(BigDecimal.valueOf(firstValue).multiply(BigDecimal.valueOf(secondValue)), ctx.op);
         result = ExprValue.createDoubleValue(firstValue * secondValue);
       } else if (firstExprValue.isIntegerNumeric() && secondExprValue.isIntegerNumeric()) {
         Long firstValue = firstExprValue.getConvertedLongValue();
         Long secondValue = secondExprValue.getConvertedLongValue();
-        testOutOfRange(new BigDecimal(firstValue).multiply(new BigDecimal(secondValue)), ctx.op);
+        testOutOfRange(BigDecimal.valueOf(firstValue).multiply(BigDecimal.valueOf(secondValue)), ctx.op);
         result = ExprValue.cloneIntegerNumericExprValue(firstExprValue, firstValue * secondValue);
       }
     } else if (ctx.op.getType() == OscExprParser.DIVIDE) {
@@ -234,6 +281,7 @@ public class EvaluatorListener extends OscExprBaseListener {
           throw new SemanticError(
               "Divison by zero", getColumn((ParserRuleContext) ctx.getChild(2)));
         }
+        testOutOfRangeDouble(BigDecimal.valueOf(firstValue).divide(BigDecimal.valueOf(secondValue), RoundingMode.HALF_UP), ctx.op);        
         result = ExprValue.createDoubleValue(firstValue / secondValue);
       } else if (firstExprValue.isIntegerNumeric() && secondExprValue.isIntegerNumeric()) {
         Long firstValue = firstExprValue.getConvertedLongValue();
@@ -249,6 +297,7 @@ public class EvaluatorListener extends OscExprBaseListener {
       if (firstExprValue.isFloatingPointNumeric() || secondExprValue.isFloatingPointNumeric()) {
         Double firstValue = firstExprValue.getConvertedDoubleValue();
         Double secondValue = secondExprValue.getConvertedDoubleValue();
+        testOutOfRangeDouble(BigDecimal.valueOf(firstValue).remainder(BigDecimal.valueOf(secondValue)), ctx.op);
         result = ExprValue.createDoubleValue(firstValue % secondValue);
       } else if (firstExprValue.isIntegerNumeric() && secondExprValue.isIntegerNumeric()) {
         Long firstValue = firstExprValue.getConvertedLongValue();
@@ -284,10 +333,17 @@ public class EvaluatorListener extends OscExprBaseListener {
     }
     return result;
   }
+
+  private void testOutOfRange(BigDecimal tester, Token token) throws Error {
+    if (tester.compareTo(maxLong) > 0 || tester.compareTo(minLong) < 0)
+      throw new SemanticError(
+          "Internal Overflow (limits of internal 64 bit integer value exceeded)", getColumn(token));
+  }
   
-  private void testOutOfRange(BigDecimal tester, Token token) throws Error
-  {
-    if ( tester.compareTo(maxLong)> 0 || tester.compareTo(minLong)< 0)
-      throw new SemanticError("Internal Overflow (limits of internal 64 bit integer value exceeded)", getColumn(token));
+  private void testOutOfRangeDouble(BigDecimal tester, Token token) throws Error {
+
+    if (tester.abs().compareTo(maxDouble) > 0 || tester.abs().compareTo(minDouble) < 0)
+      throw new SemanticError(
+          "Internal Overflow (limits of internal 64 bit integer value exceeded)", getColumn(token));
   }
 }

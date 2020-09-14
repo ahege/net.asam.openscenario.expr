@@ -3,6 +3,8 @@
  */
 package net.asam.openscenario.expr;
 
+import java.math.BigDecimal;
+
 /**
  * @author ahege
  *
@@ -40,6 +42,13 @@ public class TestShort {
     System.out.println((varInt3*maxIntLong));
     // Result is 68719476704
     
+    double result = Math.pow(-5,-1);
+    if (Double.isInfinite(result))
+    {
+      System.out.println("infinite");
+    }
+    System.out.println(new BigDecimal("-1.3").doubleValue() );
+    System.out.println(BigDecimal.valueOf(2L).compareTo(BigDecimal.valueOf(Long.MAX_VALUE)));
   }
 
 }

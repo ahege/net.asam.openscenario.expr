@@ -3,17 +3,19 @@ grammar OscExpr;
 /** The start rule; begin parsing here. */
 prog:   '${' expr '}'; 
 
-expr:   func=SQRT '(' expr ')' # Function
+expr:   func=POW '(' expr ',' expr ')' # FunctionTwoArguments
+        | func=SQRT '(' expr ')' # FunctionOneArgument
         | '(' type=TYPECAST ')' expr # Typecast
 	| MINUS expr	 # UnaryMinus
 	| expr op=(MULTIPLY | DIVIDE | MODULO) expr # MultiDivMod
 	| expr op=(PLUS|MINUS) expr # PlusMinus
-	| NUMBER_LITERAL #NumLiteral
+	| num=NUMBER_LITERAL #NumLiteral
 	| ID # IdExpr
 	| '(' expr ')'  # SquaredExpr
 	;
 
 SQRT: 'sqrt';
+POW: 'pow';
 TYPECAST :  ('int'|'double'| 'unsignedInt' | 'unsignedShort');
 ID  :   '$'[a-zA-Z_][a-zA-Z0-9_]* ;
 NUMBER_LITERAL
