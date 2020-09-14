@@ -12,7 +12,7 @@ Example:
 
 Examples for Expressions:
 *	Expressions that contains number and floating point literals like 
-    - ${-15 + 3.14 + 23 + 2.1E-7 + sqrt(9)}
+    - ${-15 + 3.14 + 23 + 2.1E-7 + sqrt(9) + pow(3.2,3)}
 *	Expressions that further contain parameter values like 
     - ${$defaultWidth +3} 
 *	Expressions with +,-,*,% operators or sqrt function like 
@@ -30,6 +30,7 @@ This fundamental list of requirements must be fullfilled.
 * Operators are exclusively supported for numerical value datatypes. For int, unsingedInt, unsignedShort and double datatypes. Not for boolean, string or dateTime datatypes.
 * The following operators are supported (in the order of operator precedence)
     - Square root function (sqrt)
+    - Power function (pow)
     - Unary Minus, negating a number (-)
     - Multiply operator (*)
     - Division operator (/)
@@ -49,7 +50,7 @@ This fundamental list of requirements must be fullfilled.
 OpenSCENARIO may process safety critical data which must guarantee accurate calculation. Explicit conversion between data types that imply data loss must be detected.
 Due to mathematical rules and notations, the implemented evaluation of expression must:
 * follow the general rules for arithmetic operator precedence.
-* detect arithmetic errors (Division by zero, sqrt of a negative value.)
+* detect arithmetic errors (Division by zero, sqrt of a negative value. pow(0,-1), pow(-3, 0.5)
 * detect conversion errors like ${(unsignedShort) 100000} or ${(unsignedShort) -10}
 * avoid internal arithmetic overflow or abort with an error.
 
