@@ -43,7 +43,7 @@ This fundamental list of requirements must be fullfilled.
     - ${(unsignedShort) $doubleValue}
     - ${(int) $doubleValue}
 * Implicit conversion is applied where information loss is not an issue. 
-* The operators are intentionally limited. Simple operations in a sceanrio file should be possible while complex calculations should not expressed in a scenario file but externally.
+* The operators are intentionally limited. Simple operations in a scenario file should be possible while complex calculations should not expressed in a scenario file but externally.
 * Other mathematical operators/functions might be added in the future.
 
 ## General implementation restrictions
