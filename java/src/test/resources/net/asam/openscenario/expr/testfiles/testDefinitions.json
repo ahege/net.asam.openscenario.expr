@@ -200,7 +200,7 @@
 	"comment": "Parsing a floating point value that exceeds internal limits ",
 	"expr": "${1.7976931348623158E308}",
 	"expectedError": {
-		"message": "Internal Overflow (limits of internal 64 bit double value exceeded)",
+		"message": "Internal Overflow (limits of internal 64 byte double value exceeded)",
 		"column": 2
 	}
 },{
@@ -208,7 +208,7 @@
 	"comment": "Parsing a floating point value that exceeds internal limits ",
 	"expr": "${1.7976931348623157E308 + 1E308}",
 	"expectedError": {
-		"message": "Internal Overflow (limits of internal 64 bit double value exceeded)",
+		"message": "Internal Overflow (limits of internal 64 byte double value exceeded)",
 		"column": 25
 	}
 },{
@@ -216,7 +216,7 @@
 	"comment": "Parsing a floating point value that exceeds internal limits ",
 	"expr": "${-1.7976931348623157E308 -1}",
 	"expectedError": {
-		"message": "Internal Overflow (limits of internal 64 bit double value exceeded)",
+		"message": "Internal Overflow (limits of internal 64 byte double value exceeded)",
 		"column": 26
 	}
 },{
@@ -224,7 +224,7 @@
 	"comment": "Parsing a floating point value that exceeds internal limits ",
 	"expr": "${4.89E-324}",
 	"expectedError": {
-		"message": "Internal Overflow (limits of internal 64 bit double value exceeded)",
+		"message": "Internal Overflow (limits of internal 64 byte double value exceeded)",
 		"column": 2
 	}
 },{
@@ -232,7 +232,7 @@
 	"comment": "Parsing a floating point value that exceeds internal limits ",
 	"expr": "${4.9E-324 -1E-324 }",
 	"expectedError": {
-		"message": "Internal Overflow (limits of internal 64 bit double value exceeded)",
+		"message": "Internal Overflow (limits of internal 64 byte double value exceeded)",
 		"column": 12
 	}
 },{
@@ -240,7 +240,7 @@
 	"comment": "Parsing a floating point value that exceeds internal limits ",
 	"expr": "${-4.9E-324 +1E-324 }",
 	"expectedError": {
-		"message": "Internal Overflow (limits of internal 64 bit double value exceeded)",
+		"message": "Internal Overflow (limits of internal 64 byte double value exceeded)",
 		"column": 13
 	}
 },{

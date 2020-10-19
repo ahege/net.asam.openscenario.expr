@@ -262,7 +262,7 @@ public class EvaluatorListener extends OscExprBaseListener {
 	private void testOutOfRangeDouble(BigDecimal tester, Token token) throws Error {
 
 		if (tester.compareTo(zero) != 0 && (tester.abs().compareTo(maxDouble) > 0 || tester.abs().compareTo(minDouble) < 0))
-			throw new SemanticError("Internal Overflow (limits of internal 64 bit double value exceeded)",
+			throw new SemanticError("Internal Overflow (limits of internal 64 byte double value exceeded)",
 					getColumn(token));
 	}
 }
