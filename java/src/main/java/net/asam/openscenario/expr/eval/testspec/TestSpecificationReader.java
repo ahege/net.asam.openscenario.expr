@@ -57,12 +57,7 @@ public class TestSpecificationReader {
       String expr = testObject.getString("expr");
       if (!testObject.isNull("expectedValue")) {
         Object object = testObject.get("expectedValue");
-        if (object.getClass() == Double.class) {
-          expectedExprValue = ExprValue.createDoubleValue((Double) object);
-        } else {
-          expectedExprValue =
-              ExprValue.createUnknownNumericLongValue(testObject.getLong("expectedValue"));
-        }
+        expectedExprValue = ExprValue.createDoubleValue(testObject.getDouble("expectedValue"));
         ExprType exprType= getExpectedDatatype(testObject);
         result.add(new TestSpecification(id, expr, expectedExprValue, definedParameters, exprType));
 

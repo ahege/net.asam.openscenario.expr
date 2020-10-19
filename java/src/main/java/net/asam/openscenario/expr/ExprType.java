@@ -11,7 +11,6 @@ public enum ExprType {
   INT,
   UNSIGNED_SHORT,
   DOUBLE,
-  UNKNOWN_NUMERIC_LONG,
   STRING,
   BOOLEAN,
   DATE_TIME;
@@ -26,7 +25,6 @@ public enum ExprType {
     exprSet.add(INT);
     exprSet.add(UNSIGNED_SHORT);
     exprSet.add(DOUBLE);
-    exprSet.add(UNKNOWN_NUMERIC_LONG);
     copiedSet = new HashSet<>();
     copiedSet.addAll(exprSet);
     exprSet.clear();
@@ -36,7 +34,6 @@ public enum ExprType {
     exprSet.add(INT);
     exprSet.add(UNSIGNED_SHORT);
     exprSet.add(DOUBLE);
-    exprSet.add(UNKNOWN_NUMERIC_LONG);
     copiedSet = new HashSet<>();
     copiedSet.addAll(exprSet);
     exprSet.clear();
@@ -46,7 +43,6 @@ public enum ExprType {
     exprSet.add(INT);
     exprSet.add(UNSIGNED_SHORT);
     exprSet.add(DOUBLE);
-    exprSet.add(UNKNOWN_NUMERIC_LONG);
     copiedSet = new HashSet<>();
     copiedSet.addAll(exprSet);
     exprSet.clear();
@@ -56,21 +52,10 @@ public enum ExprType {
     exprSet.add(INT);
     exprSet.add(UNSIGNED_SHORT);
     exprSet.add(DOUBLE);
-    exprSet.add(UNKNOWN_NUMERIC_LONG);
     copiedSet = new HashSet<>();
     copiedSet.addAll(exprSet);
     exprSet.clear();
     conversionTable.put(DOUBLE, copiedSet);
-    // UNKNOWN_NUMERIC_LONG
-    exprSet.add(UNSIGNED_INT);
-    exprSet.add(INT);
-    exprSet.add(UNSIGNED_SHORT);
-    exprSet.add(DOUBLE);
-    exprSet.add(UNKNOWN_NUMERIC_LONG);
-    copiedSet = new HashSet<>();
-    copiedSet.addAll(exprSet);
-    exprSet.clear();
-    conversionTable.put(UNKNOWN_NUMERIC_LONG, copiedSet);
 
   }
 
@@ -101,9 +86,6 @@ public enum ExprType {
     }else if (this == BOOLEAN)
     {
       return "boolean";
-    }else if (this == UNKNOWN_NUMERIC_LONG)
-    {
-      return "integer numerical literal";
     }
     return null;
   }

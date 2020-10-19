@@ -4,8 +4,10 @@ grammar OscExpr;
 prog:   '${' expr '}'; 
 
 expr:   func=POW '(' expr ',' expr ')' # FunctionTwoArguments
-        | func=SQRT '(' expr ')' # FunctionOneArgument
-        | '(' type=TYPECAST ')' expr # Typecast
+    | func=SQRT '(' expr ')' # FunctionOneArgument
+    | func=CEIL '(' expr ')' # FunctionOneArgument
+    | func=FLOOR '(' expr ')' # FunctionOneArgument
+    | func=ROUND '(' expr ')' # FunctionOneArgument   
 	| MINUS expr	 # UnaryMinus
 	| expr op=(MULTIPLY | DIVIDE | MODULO) expr # MultiDivMod
 	| expr op=(PLUS|MINUS) expr # PlusMinus
@@ -16,7 +18,10 @@ expr:   func=POW '(' expr ',' expr ')' # FunctionTwoArguments
 
 SQRT: 'sqrt';
 POW: 'pow';
-TYPECAST :  ('int'|'double'| 'unsignedInt' | 'unsignedShort');
+CEIL: 'ceil';
+FLOOR: 'floor';
+ROUND: 'floor';
+
 ID  :   '$'[a-zA-Z_][a-zA-Z0-9_]* ;
 NUMBER_LITERAL
     :   INT '.' [0-9]+ EXP? // 1.35, 1.35E-9, 0.3, -4.5

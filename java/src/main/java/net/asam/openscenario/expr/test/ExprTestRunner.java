@@ -69,28 +69,7 @@ public class ExprTestRunner {
                 isSuccessfull = false;
               }
 
-            } else if (resultExprValue.isIntegerNumeric()
-                && test.getExpectedValue().isIntegerNumeric()) {
-
-              if (test.getExpectedValue().getConvertedLongValue().doubleValue()
-                  != resultExprValue.getLongValue()) {
-
-                StringBuffer errors = new StringBuffer();
-                errors.append(
-                    "Expected Value: "
-                        + test.getExpectedValue().getConvertedLongValue().longValue());
-                errors.append("\nActual value: " + resultExprValue.getLongValue());
-                issueError(test.getId(), errors.toString(), errorLogger);
-                isSuccessfull = false;
-              }
-
-            } else {
-              StringBuffer errors = new StringBuffer();
-              errors.append("Expected Value: " + test.getExpectedValue().getDoubleValue());
-              errors.append("\nActual value: " + resultExprValue.getLongValue());
-              issueError(test.getId(), errors.toString(), errorLogger);
-              isSuccessfull = false;
-            }
+            } 
           } catch (SemanticError e) {
             issueError(test.getId(), e.getMessage() + String.format("(%d)",e.getColumn()), errorLogger);
           }

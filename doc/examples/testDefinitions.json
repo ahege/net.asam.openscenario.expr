@@ -1,6 +1,6 @@
 [{
 	"id" : 0,
-	"comment" : "test internal  calculation maximal value for unsignedShort +1 (65535+1)",
+	"comment" : "test internal calculation maximal value for unsignedShort +1 (65535+1)",
 	"parameterDefinitions": ["unsignedShort testShort = 65535;"],
 	"expr": "${$testShort +1}",
 	"expectedValue": 65536
@@ -9,9 +9,10 @@
 	"id" : 1,
 	"comment" : "Expect error when explicitly casting 65535+1 to unsignedShort",
 	"parameterDefinitions": ["unsignedShort testShort = 65535;"],
-	"expr": "${(unsignedShort) ($testShort +1)}",
+	"expr": "${$testShort +1}",
+	"expectedDatatype": unsignedShort,
 	"expectedError": {
-		"message": "Value '65536' cannot be converted to type 'unsignedShort'",
+		"message": "Value '65536.0' cannot be converted to type 'unsignedShort'",
 		"column": 2
 	}
 },{
@@ -23,7 +24,7 @@
 	"int x1=2;",
 	"int y0=3;",
 	"int y1=4;"],
-	"expr": "${$delay + ((($x1 - $x0)*(int) 2 + ($y1 - $y0)*2 )*0.5 / $speed) + sqrt(9)}",
+	"expr": "${$delay + ((($x1 - $x0)* 2 + ($y1 - $y0)*2 )*0.5 / $speed) + sqrt(9)}",
 	"expectedValue": 26.56157396722825
 },{
 	"id" : 3,
@@ -33,34 +34,32 @@
 },{
 	"id" : 4,
 	"comment" : "Expect error when explicitly casting 66000 to unsignedShort",
-	"expr": "${(unsignedShort) 66000}",
+	"expr": "${66000}",
+	"expectedDatatype": unsignedShort,
 	"expectedError": {
-		"message": "Value '66000' cannot be converted to type 'unsignedShort'",
+		"message": "Value '66000.0' cannot be converted to type 'unsignedShort'",
 		"column": 2
 	}
 },{
 	"id" : 5,
 	"comment" : "Test cutting off digits for positive double when converting to an integer",
 	"parameterDefinitions": ["double value= 65.5;"],
-	"expr": "${(int) ($value +1)}",
+	"expr": "${floor($value +1)}",
 	"expectedValue": 66
 },{
-	"expectedDatatype" : "int",
 	"id" : 6,
 	"comment" : "Test cutting off digits for negative double when converting to an integer",
 	"parameterDefinitions": ["double value= -65.5;"],
-	"expr": "${(int) ($value -1 )}",
+	"expr": "${floor($value -1 )}",
+	"expectedDatatype" : "int",
 	"expectedValue": -66
 },{
 	"id" : 7,
-	"comment" : "Expect error when not explicitly form a floating point value to an integer type.",
+	"comment" : "Test cutting off digits for negative double when converting to an integer",
 	"parameterDefinitions": ["double value= -65.5;"],
+	"expr": "${ceil($value -1 )}",
 	"expectedDatatype" : "int",
-	"expr": "${$value +1}",
-	"expectedError": {
-		"message": "Double values must be explicitly casted. Use (int), (unsignedInt) or (unsignedShort) for explicit cast.",
-		"column": 2
-	}
+	"expectedValue": -66
 },{
 	"id" : 8,
 	"comment" : "Division by zero, floating point type",
@@ -98,14 +97,6 @@
 		"column": 5
 	}
 },{
-	"id" : 11,
-	"comment": "Value exceed internal 64 byte limitations => abort with error",
-	"expr": "${-2147483648 * -2147483648 * -2147483648}",
-	"expectedError": {
-		"message": "Internal Overflow (limits of internal 64 bit integer value exceeded)",
-		"column": 28
-	}
-},{
 	"id" : 12,
 	"comment": "Sqrt of a positive floating point value ",
 	"expr": "${sqrt(6.25)}",
@@ -114,7 +105,7 @@
 	"id" : 13,
 	"comment": "Sqrt of a positive integer  value ",
 	"expr": "${sqrt(9)}",
-	"expectedValue": 3.0
+	"expectedValue": 3
 },{
 	"id" : 14,
 	"comment": "Sqrt of a negative integer value",
@@ -205,19 +196,11 @@
 	"expr": "${pow(0, 20)}",
 	"expectedValue": 0
 },{
-	"id" : 28,
-	"comment": "Parsing a integer value that exceeds internal limits ",
-	"expr": "${9223372036854775808}",
-	"expectedError": {
-		"message": "Internal Overflow (limits of internal 64 bit integer value exceeded)",
-		"column": 2
-	}
-},{
 	"id" : 29,
 	"comment": "Parsing a floating point value that exceeds internal limits ",
 	"expr": "${1.7976931348623158E308}",
 	"expectedError": {
-		"message": "Internal Overflow (limits of internal 64 bit integer value exceeded)",
+		"message": "Internal Overflow (limits of internal 64 bit double value exceeded)",
 		"column": 2
 	}
 },{
@@ -225,7 +208,7 @@
 	"comment": "Parsing a floating point value that exceeds internal limits ",
 	"expr": "${1.7976931348623157E308 + 1E308}",
 	"expectedError": {
-		"message": "Internal Overflow (limits of internal 64 bit integer value exceeded)",
+		"message": "Internal Overflow (limits of internal 64 bit double value exceeded)",
 		"column": 25
 	}
 },{
@@ -233,7 +216,7 @@
 	"comment": "Parsing a floating point value that exceeds internal limits ",
 	"expr": "${-1.7976931348623157E308 -1}",
 	"expectedError": {
-		"message": "Internal Overflow (limits of internal 64 bit integer value exceeded)",
+		"message": "Internal Overflow (limits of internal 64 bit double value exceeded)",
 		"column": 26
 	}
 },{
@@ -241,7 +224,7 @@
 	"comment": "Parsing a floating point value that exceeds internal limits ",
 	"expr": "${4.89E-324}",
 	"expectedError": {
-		"message": "Internal Overflow (limits of internal 64 bit integer value exceeded)",
+		"message": "Internal Overflow (limits of internal 64 bit double value exceeded)",
 		"column": 2
 	}
 },{
@@ -249,7 +232,7 @@
 	"comment": "Parsing a floating point value that exceeds internal limits ",
 	"expr": "${4.9E-324 -1E-324 }",
 	"expectedError": {
-		"message": "Internal Overflow (limits of internal 64 bit integer value exceeded)",
+		"message": "Internal Overflow (limits of internal 64 bit double value exceeded)",
 		"column": 12
 	}
 },{
@@ -257,7 +240,7 @@
 	"comment": "Parsing a floating point value that exceeds internal limits ",
 	"expr": "${-4.9E-324 +1E-324 }",
 	"expectedError": {
-		"message": "Internal Overflow (limits of internal 64 bit integer value exceeded)",
+		"message": "Internal Overflow (limits of internal 64 bit double value exceeded)",
 		"column": 13
 	}
 },{
